@@ -3,6 +3,10 @@ class Routes {
 }
 
 class Assets {
+  static const String appIcon = 'lib/utils/resources/icons/app_icon.png';
 }
 
-class Const {}
+class Const {
+  static const double padding = 8;
+  static const double borderRadius = 4;
+}
