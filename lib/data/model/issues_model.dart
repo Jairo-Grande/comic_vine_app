@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:comic_vine_app/domain/entities/issue_entity.dart';
 import 'package:comic_vine_app/domain/entities/comic_entity.dart'
     as comic_entitie;
@@ -31,8 +33,6 @@ class IssuesModel extends Issues {
             : null,
         version: json["version"],
       );
-
-
 }
 
 class ComicsModel extends comic_entitie.Comic {
@@ -51,35 +51,57 @@ class ComicsModel extends comic_entitie.Comic {
 
   factory ComicsModel.fromJson(Map<String, dynamic> json) => ComicsModel(
         id: json["id"],
-        image:
-            json["image"] != null ? ImageModel.fromJson(json["image"]) : null,
+        image: json["image"] != null
+            ? (json["image"] is String
+                ? ImageModel.fromJson(jsonDecode(json["image"]))
+                : ImageModel.fromJson(json["image"]))
+            : null,
         issueNumber: json["issue_number"],
         name: json["name"],
         storeDate: json["store_date"] == null
             ? null
-            : DateTime.parse(json["store_date"]),
+            : (json["store_date"] is String
+                ? DateTime.parse(json["store_date"])
+                : json["store_date"]),
         volume: json["volume"] != null
-            ? VolumeModel.fromJson(json["volume"])
+            ? (json["volume"] is String
+                ? VolumeModel.fromJson(jsonDecode(json["volume"]))
+                : VolumeModel.fromJson(json["volume"]))
             : null,
         characterCredits: json["character_credits"] != null
-            ? List<CreditModel>.from(
-                json["character_credits"].map((x) => CreditModel.fromJson(x)))
+            ? (json["character_credits"] is String
+                ? List<CreditModel>.from(jsonDecode(json["character_credits"])
+                    .map((x) => CreditModel.fromJson(x)))
+                : List<CreditModel>.from(json["character_credits"]
+                    .map((x) => CreditModel.fromJson(x))))
             : null,
         conceptCredits: json["concept_credits"] != null
-            ? List<CreditModel>.from(
-                json["concept_credits"].map((x) => CreditModel.fromJson(x)))
+            ? (json["concept_credits"] is String
+                ? List<CreditModel>.from(jsonDecode(json["concept_credits"])
+                    .map((x) => CreditModel.fromJson(x)))
+                : List<CreditModel>.from(json["concept_credits"]
+                    .map((x) => CreditModel.fromJson(x))))
             : null,
         locationCredits: json["location_credits"] != null
-            ? List<CreditModel>.from(
-                json["location_credits"].map((x) => CreditModel.fromJson(x)))
+            ? (json["location_credits"] is String
+                ? List<CreditModel>.from(jsonDecode(json["location_credits"])
+                    .map((x) => CreditModel.fromJson(x)))
+                : List<CreditModel>.from(json["location_credits"]
+                    .map((x) => CreditModel.fromJson(x))))
             : null,
         personCredits: json["person_credits"] != null
-            ? List<CreditModel>.from(
-                json["person_credits"].map((x) => CreditModel.fromJson(x)))
+            ? (json["person_credits"] is String
+                ? List<CreditModel>.from(jsonDecode(json["person_credits"])
+                    .map((x) => CreditModel.fromJson(x)))
+                : List<CreditModel>.from(
+                    json["person_credits"].map((x) => CreditModel.fromJson(x))))
             : null,
         teamCredits: json["team_credits"] != null
-            ? List<CreditModel>.from(
-                json["team_credits"].map((x) => CreditModel.fromJson(x)))
+            ? (json["team_credits"] is String
+                ? List<CreditModel>.from(jsonDecode(json["team_credits"])
+                    .map((x) => CreditModel.fromJson(x)))
+                : List<CreditModel>.from(
+                    json["team_credits"].map((x) => CreditModel.fromJson(x))))
             : null,
       );
 }
@@ -107,7 +129,9 @@ class ImageModel extends comic_entitie.Image {
         thumbUrl: json["thumb_url"],
         tinyUrl: json["tiny_url"],
         originalUrl: json["original_url"],
-        imageTags: comic_entitie.imageTagsValues.map[json["image_tags"]]!,
+        imageTags: json["image_tags"] != null
+            ? comic_entitie.imageTagsValues.map[json["image_tags"]]
+            : null,
       );
 }
 
@@ -140,4 +164,11 @@ class CreditModel extends comic_entitie.Credit {
         siteDetailUrl: json["site_detail_url"],
         role: json["role"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "api_detail_url": apiDetailUrl,
+        "id": id,
+        "name": name,
+        "site_detail_url": siteDetailUrl,
+      };
 }

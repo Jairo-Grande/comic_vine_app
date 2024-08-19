@@ -91,8 +91,7 @@ class _HomePageState extends State<HomePage> {
                                 ? ComicsList(
                                     comics: state.issues!.results!,
                                     isLoading: false,
-                                    scrollController: _scrollController
-                                  )
+                                    scrollController: _scrollController)
                                 : Container();
 
                     /*  

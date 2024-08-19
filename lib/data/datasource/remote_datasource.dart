@@ -22,27 +22,20 @@ class RemoteDataSource {
     );
 
     _client = Dio(_optionsApi);
-
-    // Configuración inicial de interceptors
     _configureInterceptors();
   }
 
   void _configureInterceptors() {
     addInterceptor(InterceptorsWrapper(
       onRequest: (options, handler) {
-        // Agregar lógica antes de enviar la solicitud
-        //print('Request: ${options.uri} interceptor');
         handler.next(options);
       },
       onResponse: (response, handler) {
-        // Agregar lógica para manejar la respuesta
-       //print('Response: ${response.statusCode} ${response.data}  interceptor');
         handler.next(response);
+        print('NEW RESPONSE ');
       },
       onError: (error, handler) {
-        // Manejar errores
-        /*     print(
-            'Error: ${error.response?.statusCode} ${error.message}  interceptor'); */
+        //TODO: Error alert.
         handler.next(error);
       },
     ));
@@ -77,7 +70,7 @@ class RemoteDataSource {
     }
   }
 
-  Future<ComicsModel> fetchIssueById({int? id}) async {
+  Future<IssuesModel> fetchIssueById({int? id}) async {
     final Map<String, dynamic> queryParams = {
       'field_list':
           'person_credits,character_credits,team_credits,location_credits,concept_credits',
@@ -92,7 +85,7 @@ class RemoteDataSource {
     if (apiResponse.statusCode == 200) {
       try {
         final issues = IssuesModel.fromJson((apiResponse.data));
-        return issues.results!.first;
+        return issues;
       } catch (error) {
         throw ServerException();
       }

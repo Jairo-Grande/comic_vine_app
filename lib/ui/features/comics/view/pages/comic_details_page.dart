@@ -29,118 +29,154 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: BlocBuilder<IssueBloc, IssueState>(
-            builder: (context, state) {
-              if (state.issueDetailsError != null) {
-                return Text('Error ${state.issuesError}');
-              } else if (state.issueDetails != null) {
-                //function to organize list  person_credits,character_credits,team_credits,location_credits,concept_credits
-                _formatList(state.issueDetails!);
+        child: Column(
+          children: [
+            Container(
+              color: Colors.yellow[50],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(Const.padding),
+                    child: Image.asset(width: 70, height: 50, Assets.appIcon),
+                  ),
+                  Expanded(child: Container()),
+              
+                ],
+              ),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  context.read<IssueBloc>().add(LoadIssueDetails(null, true));
+                },
+                child: SingleChildScrollView(
+                  child: BlocBuilder<IssueBloc, IssueState>(
+                    builder: (context, state) {
+                      if (state.issueDetailsError != null) {
+                        return Text('Error ${state.issuesError}');
+                      } else if (state.issueDetailsLoading) {
+                     return  Container();
+                      } else if (state.issueDetails != null) {
+                        //function to organize list  person_credits,character_credits,team_credits,location_credits,concept_credits
+                        _formatList(state.issueDetails!);
 
-                return Column(
-                  children: [
-                    Hero(
-                      tag: state.issueDetails!.id!,
-                      child: Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey[200]!,
-                              width: 5,
-                            ),
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(Const.padding),
-                              child: Image.network(
-                                  state.issueDetails!.image!.mediumUrl!,
-                                  fit: BoxFit.contain),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      color: Colors.grey[200],
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.all(Const.padding),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        return Column(
                           children: [
-                            DescriptionText(
-                                principalText: 'Name',
-                                secondaryText: state.issueDetails!.name),
-                            const SizedBox(
-                              height: 10,
+                            Hero(
+                              tag: state.issueDetails!.id!,
+                              child: Center(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey[200]!,
+                                      width: 5,
+                                    ),
+                                  ),
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.all(Const.padding),
+                                      child: Image.network(
+                                          state.issueDetails!.image!.mediumUrl!,
+                                          fit: BoxFit.contain),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            DescriptionText(
-                                principalText: 'Issue Number',
-                                secondaryText: state.issueDetails?.issueNumber),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            DescriptionText(
-                                principalText: 'Volume',
-                                secondaryText:
-                                    state.issueDetails!.volume?.name),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            DescriptionText(
-                              principalText: 'First Sold:',
-                              secondaryText: (state.issueDetails?.storeDate !=
-                                      null)
-                                  ? formattedDate = DateFormat('dd/MMM/yyyy')
-                                      .format(state.issueDetails!.storeDate!)
-                                  : null,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Divider(),
-                            DescriptionText(
-                              principalText: 'Person Credits',
-                              secondaryText: personCreditNames,
-                              titleMode: true,
-                            ),
-                            const Divider(),
-                            DescriptionText(
-                              principalText: 'Characters Credits',
-                              titleMode: true,
-                              secondaryText: characterNames,
-                            ),
-                            const Divider(),
-                            DescriptionText(
-                              principalText: 'Team Credits',
-                              titleMode: true,
-                              secondaryText: teamNames,
-                            ),
-                            const Divider(),
-                            DescriptionText(
-                              principalText: 'Location Credits',
-                              secondaryText: locationNames,
-                              titleMode: true,
-                            ),
-                            const Divider(),
-                            DescriptionText(
-                              principalText: 'Concept Credits',
-                              secondaryText: conceptNames,
-                              titleMode: true,
-                            ),
+                           Container(
+                                    color: Colors.grey[200],
+                                    width: double.infinity,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.all(Const.padding),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          DescriptionText(
+                                              principalText: 'Name',
+                                              secondaryText:
+                                                  state.issueDetails!.name),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          DescriptionText(
+                                              principalText: 'Issue Number',
+                                              secondaryText: state
+                                                  .issueDetails?.issueNumber),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          DescriptionText(
+                                              principalText: 'Volume',
+                                              secondaryText: state
+                                                  .issueDetails!.volume?.name),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          DescriptionText(
+                                            principalText: 'First Sold',
+                                            secondaryText: (state.issueDetails
+                                                        ?.storeDate !=
+                                                    null)
+                                                ? formattedDate =
+                                                    DateFormat('dd/MMM/yyyy')
+                                                        .format(state
+                                                            .issueDetails!
+                                                            .storeDate!)
+                                                : null,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          const Divider(),
+                                          DescriptionText(
+                                            principalText: 'Person Credits',
+                                            secondaryText: personCreditNames,
+                                            titleMode: true,
+                                          ),
+                                          const Divider(),
+                                          DescriptionText(
+                                            principalText: 'Characters Credits',
+                                            titleMode: true,
+                                            secondaryText: characterNames,
+                                          ),
+                                          const Divider(),
+                                          DescriptionText(
+                                            principalText: 'Team Credits',
+                                            titleMode: true,
+                                            secondaryText: teamNames,
+                                          ),
+                                          const Divider(),
+                                          DescriptionText(
+                                            principalText: 'Location Credits',
+                                            secondaryText: locationNames,
+                                            titleMode: true,
+                                          ),
+                                          const Divider(),
+                                          DescriptionText(
+                                            principalText: 'Concept Credits',
+                                            secondaryText: conceptNames,
+                                            titleMode: true,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                           ],
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

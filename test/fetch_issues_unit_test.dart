@@ -1,6 +1,7 @@
 import 'package:comic_vine_app/data/datasource/remote_datasource.dart';
 import 'package:comic_vine_app/data/failure.dart';
 import 'package:comic_vine_app/data/model/app_config_model.dart';
+import 'package:comic_vine_app/data/model/issues_model.dart';
 import 'package:comic_vine_app/domain/entities/app_config_entity.dart';
 import 'package:comic_vine_app/domain/entities/comic_entity.dart';
 import 'package:comic_vine_app/domain/entities/issue_entity.dart';
@@ -200,7 +201,7 @@ void main() async {
 
       // Verifica que la respuesta sea un Issues
       expect(await comicVineApiRepositoryImpl.fetchIssueById(id: 1067091),
-          isA<Right<Failure, Comic>>());
+          isA<Right<Failure, ComicsModel>>());
     });
 
     test('Failure fetching Issue Details', () async {

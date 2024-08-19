@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
-
   return runApp(
     MultiBlocProvider(
       providers: [

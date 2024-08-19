@@ -21,7 +21,6 @@ class _CustomCardProductState extends State<CustomCardProduct> {
 
   @override
   void initState() {
-
     storeDate = widget.comic.storeDate;
     super.initState();
   }
@@ -39,7 +38,7 @@ class _CustomCardProductState extends State<CustomCardProduct> {
     return GestureDetector(
       onTap: () {
         //request Issue details to the API.
-        context.read<IssueBloc>().add(LoadIssueDetails(widget.comic));
+        context.read<IssueBloc>().add(LoadIssueDetails(widget.comic, false));
 
         //Navigate to comicDetailsPage.
         Navigator.pushNamed(context, Routes.comicDetails);
@@ -85,7 +84,7 @@ class _CustomCardProductState extends State<CustomCardProduct> {
                       children: [
                         DescriptionText(
                           principalText: 'Name',
-                          secondaryText: widget.comic.issueNumber,
+                          secondaryText: widget.comic.name,
                         ),
                         const SizedBox(
                           height: 10,
@@ -105,7 +104,7 @@ class _CustomCardProductState extends State<CustomCardProduct> {
                           height: 10,
                         ),
                         DescriptionText(
-                          principalText: 'First Sold: ',
+                          principalText: 'First Sold',
                           secondaryText: (storeDate != null)
                               ? formattedDate =
                                   DateFormat('dd/MMM/yyyy').format(storeDate!)

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:comic_vine_app/data/model/issues_model.dart';
 
 class Comic {
@@ -25,6 +27,32 @@ class Comic {
       required this.locationCredits,
       required this.personCredits,
       required this.teamCredits});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'issue_number': issueNumber,
+      "store_date": storeDate?.toIso8601String(),
+      "image": image != null ? jsonEncode(image!.toJson()) : null,
+      'volume': volume != null ? jsonEncode(volume!.toJson()) : null,
+      "character_credits": characterCredits != null
+          ? jsonEncode(characterCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "concept_credits": conceptCredits != null
+          ? jsonEncode(conceptCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "location_credits": locationCredits != null
+          ? jsonEncode(locationCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "person_credits": personCredits != null
+          ? jsonEncode(personCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "team_credits": teamCredits != null
+          ? jsonEncode(teamCredits!.map((x) => x.toJson()).toList())
+          : null,
+    };
+  }
 
   Comic copyWith({
     int? id,
@@ -79,6 +107,18 @@ class Image {
     required this.originalUrl,
     required this.imageTags,
   });
+
+  Map<String, dynamic> toJson() => {
+        "icon_url": iconUrl,
+        "medium_url": mediumUrl,
+        "screen_url": screenUrl,
+        "screen_large_url": screenLargeUrl,
+        "small_url": smallUrl,
+        "super_url": superUrl,
+        "thumb_url": thumbUrl,
+        "tiny_url": tinyUrl,
+        "original_url": originalUrl
+      };
 }
 
 enum ImageTags { allImages }
@@ -92,6 +132,13 @@ class Volume {
   String? siteDetailUrl;
 
   Volume({this.apiDetailUrl, this.id, this.name, this.siteDetailUrl});
+
+  Map<String, dynamic> toJson() => {
+        "api_detail_url": apiDetailUrl,
+        "id": id,
+        "name": name,
+        "site_detail_url": siteDetailUrl,
+      };
 }
 
 class EnumValues<T> {
