@@ -31,11 +31,9 @@ class RemoteDataSource {
         handler.next(options);
       },
       onResponse: (response, handler) {
-        handler.next(response);
-        print('NEW RESPONSE ');
+        handler.next(response);        
       },
       onError: (error, handler) {
-        //TODO: Error alert.
         handler.next(error);
       },
     ));
