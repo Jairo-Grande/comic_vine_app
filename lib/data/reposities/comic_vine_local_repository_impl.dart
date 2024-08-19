@@ -23,7 +23,7 @@ class ComicVineLocalRepositoryImpl implements ComicVineLocalRepository {
   }
 
   @override
-  Future<Either<Failure, int>> insertIssue({required Comic comic}) async {
+  Future<Either<Failure, int>> insertIssue({required ComicsModel comic}) async {
     try {
       final result = await localDatasource.insertComic(comic: comic);
       return Right(result);
@@ -33,7 +33,7 @@ class ComicVineLocalRepositoryImpl implements ComicVineLocalRepository {
   }
 
   @override
-  Future<Either<Failure, int>> updateComic({required Comic comic}) async {
+  Future<Either<Failure, int>> updateComic({required ComicsModel comic}) async {
     try {
       final result = await localDatasource.updateComic(comic: comic);
       return Right(result);
@@ -41,7 +41,6 @@ class ComicVineLocalRepositoryImpl implements ComicVineLocalRepository {
       return const Left(DatabaseFailure('Local Database Failure'));
     }
   }
-
   
   @override
   Future<Either<Failure, int>> deleteComic({required int id}) async {
@@ -52,15 +51,5 @@ class ComicVineLocalRepositoryImpl implements ComicVineLocalRepository {
       return const Left(DatabaseFailure('Local Database Failure'));
     }
   }
-
-
-
-  
-
-
-
-
-
-
 
 }

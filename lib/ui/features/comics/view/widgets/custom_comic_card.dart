@@ -1,5 +1,5 @@
-import 'package:comic_vine_app/domain/entities/comic_entity.dart'
-    as comic_entity;
+
+import 'package:comic_vine_app/data/model/issues_model.dart';
 import 'package:comic_vine_app/ui/features/comics/bloc/comics_bloc.dart';
 import 'package:comic_vine_app/ui/features/comics/view/widgets/description_text.dart';
 import 'package:comic_vine_app/utils/contants.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class CustomCardProduct extends StatefulWidget {
-  final comic_entity.Comic comic;
+  final ComicsModel comic;
   const CustomCardProduct({super.key, required this.comic});
 
   @override

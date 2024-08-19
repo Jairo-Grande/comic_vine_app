@@ -4,12 +4,12 @@ class IssueState {
   //getIssues
   final bool issuesLoading;
   final String? issuesError;
-  final Issues? issues;
+  final IssuesModel? issues;
 
   //getIssueDetails
   final bool issueDetailsLoading;
   final String? issueDetailsError;
-  final Comic? issueDetails;
+  final ComicsModel? issueDetails;
 
 //pagination Logic here.
   final bool hasMore;
@@ -28,10 +28,10 @@ class IssueState {
   IssueState copyWith(
           {bool? issuesLoading,
           String? issuesError,
-          Issues? issues,
+          IssuesModel? issues,
           bool? issueDetailsLoading,
           String? issueDetailsError,
-          Comic? issueDetails,
+          ComicsModel? issueDetails,
           bool? hasMore,
           bool? loadingMoreData}) =>
       IssueState(

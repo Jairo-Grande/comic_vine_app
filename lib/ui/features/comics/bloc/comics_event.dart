@@ -10,13 +10,13 @@ class LoadIssues extends IssueEvent {
 
 class LoadIssueDetails extends IssueEvent {
   bool? deleteRegister;
-  Comic? comic;
+  ComicsModel? comic;
   LoadIssueDetails(this.comic, this.deleteRegister);
 }
 
 class InsertIssueDB extends IssueEvent {
   GetComicVineLocal comicVineLocal;
-  Comic comic;
+  ComicsModel comic;
   InsertIssueDB({required this.comicVineLocal, required this.comic});
 }
 
@@ -25,7 +25,3 @@ class FetchIssueByIdAndIsertIntoDB extends IssueEvent {
   FetchIssueByIdAndIsertIntoDB({required this.comicId});
 }
 
-class RefreshComicDetails extends IssueEvent {
-  final int comicId;
-  RefreshComicDetails({required this.comicId});
-}

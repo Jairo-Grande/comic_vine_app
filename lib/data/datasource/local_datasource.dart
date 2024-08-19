@@ -1,7 +1,6 @@
 import 'package:comic_vine_app/data/exeption.dart';
 
 import 'package:comic_vine_app/data/model/issues_model.dart';
-import 'package:comic_vine_app/domain/entities/comic_entity.dart';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -32,7 +31,7 @@ class LocalDatasource {
   }
 
   Future _onCreate(Database db, int version) async {
-  await db.execute('''
+    await db.execute('''
     CREATE TABLE comics(
       id INTEGER PRIMARY KEY,
       name TEXT,
@@ -47,11 +46,11 @@ class LocalDatasource {
       team_credits TEXT
     )
   ''');
-}
+  }
 
 //function to insert comic
 
-  Future<int> insertComic({required Comic comic}) async {
+  Future<int> insertComic({required ComicsModel comic}) async {
     final db = await database;
     return await db.insert(
       'comics',
@@ -62,15 +61,15 @@ class LocalDatasource {
 
 //function to update comic
 
-  Future<int> updateComic({required Comic comic}) async {
-  final db = await database;
-  return await db.update(
-    'comics',
-    comic.toJson(),
-    where: 'id = ?',
-    whereArgs: [comic.id],
-  );
-}
+  Future<int> updateComic({required ComicsModel comic}) async {
+    final db = await database;
+    return await db.update(
+      'comics',
+      comic.toJson(),
+      where: 'id = ?',
+      whereArgs: [comic.id],
+    );
+  }
 
 //function to find comic by Id.
 
@@ -89,16 +88,14 @@ class LocalDatasource {
     }
   }
 
-//function to delete register with id 
+//function to delete register with id
 
   Future<int> deleteComic({required int id}) async {
-  final db = await database;
-  return await db.delete(
-    'comics',
-    where: 'id = ?',
-    whereArgs: [id],
-  );
-}
-
-
+    final db = await database;
+    return await db.delete(
+      'comics',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

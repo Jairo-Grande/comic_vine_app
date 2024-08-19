@@ -1,12 +1,12 @@
-import 'package:comic_vine_app/domain/entities/comic_entity.dart'
-    as comic_entitie;
+import 'package:comic_vine_app/data/model/issues_model.dart';
+
 import 'package:comic_vine_app/ui/features/comics/bloc/comics_bloc.dart';
 import 'package:comic_vine_app/ui/features/comics/view/widgets/custom_comic_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ComicsList extends StatefulWidget {
-  final List<comic_entitie.Comic> comics;
+  final List<ComicsModel> comics;
   final ScrollController scrollController;
   final bool isLoading;
 

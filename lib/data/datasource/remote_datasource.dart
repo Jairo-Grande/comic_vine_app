@@ -31,7 +31,7 @@ class RemoteDataSource {
         handler.next(options);
       },
       onResponse: (response, handler) {
-        handler.next(response);        
+        handler.next(response);
       },
       onError: (error, handler) {
         handler.next(error);

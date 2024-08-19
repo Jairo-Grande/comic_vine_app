@@ -1,4 +1,5 @@
 import 'package:comic_vine_app/data/failure.dart';
+import 'package:comic_vine_app/data/model/issues_model.dart';
 
 import 'package:comic_vine_app/domain/entities/comic_entity.dart';
 import 'package:comic_vine_app/domain/entities/issue_entity.dart';
@@ -16,18 +17,17 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
   IssueBloc(this.getComicVineApi, this.getComicVineLocal)
       : super(IssueState()) {
+    //Db evemts to add issues.
     on<LoadIssues>(_loadIssues);
     on<LoadIssueDetails>(_loadIssueDetail);
 
-    //DB EVENT TO ADD ISSUE.
+    //event to find comic in API services
     on<FetchIssueByIdAndIsertIntoDB>(_fetchIssueAndInsertIntoDB);
     on<InsertIssueDB>(_inserIssuesDB);
-
-    //refreshComicDetails
-    on<RefreshComicDetails>(_refreshComicDetails);
   }
 
   _loadIssues(LoadIssues event, Emitter emit) async {
+    //pagination logic.
     if (state.loadingMoreData || !state.hasMore) return;
 
     if (event.loadingMoreData != null && event.loadingMoreData == true) {
@@ -46,7 +46,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       },
       (issues) {
         final hasMore = issues.results!.length == 10;
-        Issues? updatedIssues = issues;
+        IssuesModel? updatedIssues = issues;
         //Add new issues to paginate.
         if (state.issues != null) {
           updatedIssues = state.issues?.copyWith(
@@ -150,13 +150,12 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       (response) {},
     );
   }
-
-  _refreshComicDetails(RefreshComicDetails event, Emitter emit) {}
 }
 
 Future<Either<Failure, Comic>> findInDB(
-    {required GetComicVineLocal getComicVineLocal,
-    required int comicId}) async {
+    {
+  required GetComicVineLocal getComicVineLocal,
+  required int comicId}) async {
   final responseCache = await getComicVineLocal.getIssueById(id: comicId);
   return responseCache;
 }

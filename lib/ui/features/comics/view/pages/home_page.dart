@@ -52,29 +52,17 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(Const.padding),
-                    child: Image.asset(width: 70, height: 50, Assets.appIcon),
+                    child: Image.asset(
+                      width: 70,
+                      height: 50,
+                      Assets.appIcon,
+                    ),
                   ),
                   Flexible(
                       child: CustomSearchBar(
                     controller: TextEditingController(),
                   )),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: Const.padding, right: Const.padding),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius:
-                                BorderRadius.circular(Const.borderRadius)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(Const.padding),
-                          child: Icon(
-                            size: 40,
-                            Icons.grid_view_rounded,
-                            color: Colors.green[400],
-                          ),
-                        )),
-                  )
+                  SizedBox(width: 20)
                 ],
               ),
             ),

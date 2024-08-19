@@ -1,3 +1,4 @@
+import 'package:comic_vine_app/config/themes/custom_theme.dart';
 import 'package:comic_vine_app/ui/features/comics/bloc/comics_bloc.dart';
 import 'package:comic_vine_app/ui/features/comics/view/pages/home_page.dart';
 import 'package:comic_vine_app/ui/routes.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
       home: const HomePage(),
+      theme: themeLight(context),
     );
   }
 }

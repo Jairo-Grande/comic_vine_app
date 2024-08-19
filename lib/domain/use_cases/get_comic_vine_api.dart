@@ -10,7 +10,7 @@ class GetComicVineApi {
 
   GetComicVineApi(this.repository);
 
-  Future<Either<Failure, Issues>> getIssues(
+  Future<Either<Failure, IssuesModel>> getIssues(
       {int? offset, String? name, String? dateDescriptor}) {
     return repository.fetchIssues(offset: offset);
   }

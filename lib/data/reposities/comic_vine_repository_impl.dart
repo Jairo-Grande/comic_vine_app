@@ -5,7 +5,7 @@ import 'package:comic_vine_app/data/exeption.dart';
 import 'package:comic_vine_app/data/failure.dart';
 import 'package:comic_vine_app/data/model/issues_model.dart';
 
-import 'package:comic_vine_app/domain/entities/issue_entity.dart';
+
 import 'package:comic_vine_app/domain/repositories/comic_vine_repository.dart';
 import 'package:dartz/dartz.dart';
 
@@ -15,7 +15,7 @@ class ComicVineRepositoryImpl implements ComicVineRepository {
   ComicVineRepositoryImpl({required this.remoteDatasource});
 
   @override
-  Future<Either<Failure, Issues>> fetchIssues({int? offset}) async {
+  Future<Either<Failure, IssuesModel>> fetchIssues({int? offset}) async {
     try {
       final result = await remoteDatasource.fetchIssues(offset: offset);
       return Right(result);

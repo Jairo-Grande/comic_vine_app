@@ -33,6 +33,30 @@ class IssuesModel extends Issues {
             : null,
         version: json["version"],
       );
+
+  IssuesModel copyWith({
+    String? error,
+    int? limit,
+    int? offset,
+    String? issueNumber,
+    int? numberOfPageResults,
+    int? numberOfTotalResults,
+    int? statusCode,
+    List<ComicsModel>? results,
+    String? version,
+  }) {
+    return IssuesModel(
+      error: error ?? this.error,
+      limit: limit ?? this.limit,
+      offset: offset ?? this.offset,
+      issueNumber: issueNumber ?? this.issueNumber,
+      numberOfPageResults: numberOfPageResults ?? this.numberOfPageResults,
+      numberOfTotalResults: numberOfTotalResults ?? this.numberOfTotalResults,
+      statusCode: statusCode ?? this.statusCode,
+      results: results ?? this.results,
+      version: version ?? this.version,
+    );
+  }
 }
 
 class ComicsModel extends comic_entitie.Comic {
@@ -104,6 +128,60 @@ class ComicsModel extends comic_entitie.Comic {
                     json["team_credits"].map((x) => CreditModel.fromJson(x))))
             : null,
       );
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'issue_number': issueNumber,
+      "store_date": storeDate?.toIso8601String(),
+      "image": image != null ? jsonEncode(image!.toJson()) : null,
+      'volume': volume != null ? jsonEncode(volume!.toJson()) : null,
+      "character_credits": characterCredits != null
+          ? jsonEncode(characterCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "concept_credits": conceptCredits != null
+          ? jsonEncode(conceptCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "location_credits": locationCredits != null
+          ? jsonEncode(locationCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "person_credits": personCredits != null
+          ? jsonEncode(personCredits!.map((x) => x.toJson()).toList())
+          : null,
+      "team_credits": teamCredits != null
+          ? jsonEncode(teamCredits!.map((x) => x.toJson()).toList())
+          : null,
+    };
+  }
+
+  ComicsModel copyWith({
+    int? id,
+    String? name,
+    String? issueNumber,
+    DateTime? storeDate,
+    VolumeModel? volume,
+    ImageModel? image,
+    List<CreditModel>? characterCredits,
+    List<CreditModel>? conceptCredits,
+    List<CreditModel>? locationCredits,
+    List<CreditModel>? personCredits,
+    List<CreditModel>? teamCredits,
+  }) {
+    return ComicsModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      issueNumber: issueNumber ?? this.issueNumber,
+      storeDate: storeDate ?? this.storeDate,
+      volume: volume ?? this.volume,
+      image: image ?? this.image,
+      characterCredits: characterCredits ?? this.characterCredits,
+      conceptCredits: conceptCredits ?? this.conceptCredits,
+      locationCredits: locationCredits ?? this.locationCredits,
+      personCredits: personCredits ?? this.personCredits,
+      teamCredits: teamCredits ?? this.teamCredits,
+    );
+  }
 }
 
 class ImageModel extends comic_entitie.Image {
@@ -133,6 +211,18 @@ class ImageModel extends comic_entitie.Image {
             ? comic_entitie.imageTagsValues.map[json["image_tags"]]
             : null,
       );
+
+  Map<String, dynamic> toJson() => {
+        "icon_url": iconUrl,
+        "medium_url": mediumUrl,
+        "screen_url": screenUrl,
+        "screen_large_url": screenLargeUrl,
+        "small_url": smallUrl,
+        "super_url": superUrl,
+        "thumb_url": thumbUrl,
+        "tiny_url": tinyUrl,
+        "original_url": originalUrl
+      };
 }
 
 class VolumeModel extends comic_entitie.Volume {
@@ -147,6 +237,13 @@ class VolumeModel extends comic_entitie.Volume {
       id: json["id"],
       name: json["name"],
       siteDetailUrl: json["site_detail_url"]);
+
+  Map<String, dynamic> toJson() => {
+        "api_detail_url": apiDetailUrl,
+        "id": id,
+        "name": name,
+        "site_detail_url": siteDetailUrl,
+      };
 }
 
 class CreditModel extends comic_entitie.Credit {
