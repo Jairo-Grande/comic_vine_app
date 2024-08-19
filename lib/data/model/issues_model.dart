@@ -1,12 +1,14 @@
-import 'package:comic_vine_app/domain/entities/issue.dart';
-import 'package:comic_vine_app/domain/entities/comic.dart' as comic_entitie;
+import 'package:comic_vine_app/domain/entities/issue_entity.dart';
+import 'package:comic_vine_app/domain/entities/comic_entity.dart'
+    as comic_entitie;
 
-class IssuesModel extends Issue {
+class IssuesModel extends Issues {
   IssuesModel(
       {super.error,
       super.limit,
       super.numberOfPageResults,
       super.numberOfTotalResults,
+      super.issueNumber,
       super.offset,
       super.results,
       super.statusCode,
@@ -16,13 +18,21 @@ class IssuesModel extends Issue {
         error: json["error"],
         limit: json["limit"],
         offset: json["offset"],
+        issueNumber: json["issue_number"],
         numberOfPageResults: json["number_of_page_results"],
         numberOfTotalResults: json["number_of_total_results"],
         statusCode: json["status_code"],
-        results: List<ComicsModel>.from(
-            json["results"].map((x) => ComicsModel.fromJson(x))),
+        //The servide to find Issue by Id return unique object, is necesary validate becouse is used twice.
+        results: json["results"] != null
+            ? (json["results"] is List
+                ? List<ComicsModel>.from(
+                    json["results"].map((x) => ComicsModel.fromJson(x)))
+                : [ComicsModel.fromJson(json["results"])])
+            : null,
         version: json["version"],
       );
+
+
 }
 
 class ComicsModel extends comic_entitie.Comic {
@@ -32,17 +42,45 @@ class ComicsModel extends comic_entitie.Comic {
       super.issueNumber,
       super.storeDate,
       super.volume,
-      super.image});
+      super.image,
+      super.characterCredits,
+      super.conceptCredits,
+      super.locationCredits,
+      super.personCredits,
+      super.teamCredits});
 
   factory ComicsModel.fromJson(Map<String, dynamic> json) => ComicsModel(
         id: json["id"],
-        image: ImageModel.fromJson(json["image"]),
+        image:
+            json["image"] != null ? ImageModel.fromJson(json["image"]) : null,
         issueNumber: json["issue_number"],
         name: json["name"],
         storeDate: json["store_date"] == null
             ? null
             : DateTime.parse(json["store_date"]),
-        volume: VolumeModel.fromJson(json["volume"]),
+        volume: json["volume"] != null
+            ? VolumeModel.fromJson(json["volume"])
+            : null,
+        characterCredits: json["character_credits"] != null
+            ? List<CreditModel>.from(
+                json["character_credits"].map((x) => CreditModel.fromJson(x)))
+            : null,
+        conceptCredits: json["concept_credits"] != null
+            ? List<CreditModel>.from(
+                json["concept_credits"].map((x) => CreditModel.fromJson(x)))
+            : null,
+        locationCredits: json["location_credits"] != null
+            ? List<CreditModel>.from(
+                json["location_credits"].map((x) => CreditModel.fromJson(x)))
+            : null,
+        personCredits: json["person_credits"] != null
+            ? List<CreditModel>.from(
+                json["person_credits"].map((x) => CreditModel.fromJson(x)))
+            : null,
+        teamCredits: json["team_credits"] != null
+            ? List<CreditModel>.from(
+                json["team_credits"].map((x) => CreditModel.fromJson(x)))
+            : null,
       );
 }
 
@@ -74,11 +112,32 @@ class ImageModel extends comic_entitie.Image {
 }
 
 class VolumeModel extends comic_entitie.Volume {
-  VolumeModel({super.apiDetailUrl, super.id, super.name, super.siteDetailUrl});
+  VolumeModel({
+    super.apiDetailUrl,
+    super.id,
+    super.name,
+    super.siteDetailUrl,
+  });
   factory VolumeModel.fromJson(Map<String, dynamic> json) => VolumeModel(
+      apiDetailUrl: json["api_detail_url"],
+      id: json["id"],
+      name: json["name"],
+      siteDetailUrl: json["site_detail_url"]);
+}
+
+class CreditModel extends comic_entitie.Credit {
+  CreditModel(
+      {super.apiDetailUrl,
+      super.id,
+      super.name,
+      super.siteDetailUrl,
+      super.role});
+
+  factory CreditModel.fromJson(Map<String, dynamic> json) => CreditModel(
         apiDetailUrl: json["api_detail_url"],
         id: json["id"],
         name: json["name"],
         siteDetailUrl: json["site_detail_url"],
+        role: json["role"],
       );
 }

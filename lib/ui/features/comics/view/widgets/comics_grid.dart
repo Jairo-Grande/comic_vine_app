@@ -1,14 +1,16 @@
-import 'package:comic_vine_app/domain/entities/comic.dart' as comic_entitie;
+import 'package:comic_vine_app/domain/entities/comic_entity.dart'
+    as comic_entitie;
 import 'package:flutter/material.dart';
 
 class ComicsGrid extends StatelessWidget {
   final List<comic_entitie.Comic> comics;
-  final Future<void> Function() onLoadMore;
+  // final Future<void> Function() onLoadMore;
   final bool isLoading;
 
-  ComicsGrid(
-      {required this.comics,
-      required this.onLoadMore,
+  const ComicsGrid(
+      {super.key,
+      required this.comics,
+      //  required this.onLoadMore,
       required this.isLoading});
 
   @override
@@ -25,7 +27,7 @@ class ComicsGrid extends StatelessWidget {
           if (isLoading) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            onLoadMore();
+            //  onLoadMore();
             return const SizedBox.shrink();
           }
         }

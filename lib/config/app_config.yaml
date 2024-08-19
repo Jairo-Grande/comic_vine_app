@@ -1,0 +1,5 @@
+baseUrl: "https://comicvine.gamespot.com/api"
+apiKey: "f5d54aa1c721b15748302ecdfaa143a21201599a"
+connectTimeOut: 120000 
+receiveTimeOut: 120000 
+ts: 1
