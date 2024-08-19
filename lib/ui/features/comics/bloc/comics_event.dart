@@ -25,3 +25,9 @@ class FetchIssueByIdAndIsertIntoDB extends IssueEvent {
   FetchIssueByIdAndIsertIntoDB({required this.comicId});
 }
 
+class SearchComic extends IssueEvent {
+  final String text;
+  SearchComic({required this.text});
+}
+
+

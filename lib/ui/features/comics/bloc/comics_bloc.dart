@@ -2,7 +2,7 @@ import 'package:comic_vine_app/data/failure.dart';
 import 'package:comic_vine_app/data/model/issues_model.dart';
 
 import 'package:comic_vine_app/domain/entities/comic_entity.dart';
-import 'package:comic_vine_app/domain/entities/issue_entity.dart';
+
 import 'package:comic_vine_app/domain/use_cases/get_comic_vine_local.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +24,9 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
     //event to find comic in API services
     on<FetchIssueByIdAndIsertIntoDB>(_fetchIssueAndInsertIntoDB);
     on<InsertIssueDB>(_inserIssuesDB);
+
+    //event to search
+    on<SearchComic>(_searchComic);
   }
 
   _loadIssues(LoadIssues event, Emitter emit) async {
@@ -56,9 +59,13 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
         if (state.loadingMoreData) {
           emit(state.copyWith(
-              issues: updatedIssues, loadingMoreData: false, hasMore: hasMore));
+              filteredIssues: updatedIssues!.results,
+              issues: updatedIssues,
+              loadingMoreData: false,
+              hasMore: hasMore));
         } else {
           emit(state.copyWith(
+            filteredIssues: updatedIssues!.results,
             issues: updatedIssues,
             issuesLoading: false,
           ));
@@ -150,12 +157,35 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
       (response) {},
     );
   }
-}
 
-Future<Either<Failure, Comic>> findInDB(
-    {
-  required GetComicVineLocal getComicVineLocal,
-  required int comicId}) async {
-  final responseCache = await getComicVineLocal.getIssueById(id: comicId);
-  return responseCache;
+  _searchComic(SearchComic event, Emitter emit) {
+    List<ComicsModel> dummyList = [];
+
+    if (event.text.isNotEmpty) {
+      if (state.issues != null && state.issues!.results != null) {
+        dummyList = state.issues!.results!
+            .where((item) =>                
+                item.name != null &&
+                item.name!.toLowerCase().contains(event.text.toLowerCase()))
+            .toList();
+        emit(state.copyWith(filteredIssues: dummyList));
+      } else {      
+        emit(state.copyWith(filteredIssues: []));
+      }
+    } else {
+      if (state.issues != null && state.issues!.results != null) {
+        dummyList = state.issues!.results!;
+        emit(state.copyWith(filteredIssues: dummyList));
+      } else {
+        emit(state.copyWith(filteredIssues: []));
+      }
+    }
+  }
+
+  Future<Either<Failure, Comic>> findInDB(
+      {required GetComicVineLocal getComicVineLocal,
+      required int comicId}) async {
+    final responseCache = await getComicVineLocal.getIssueById(id: comicId);
+    return responseCache;
+  }
 }

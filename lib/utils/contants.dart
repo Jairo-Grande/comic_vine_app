@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Routes {
   static const String home = 'home';
   static const String comicDetails = 'comic-details';

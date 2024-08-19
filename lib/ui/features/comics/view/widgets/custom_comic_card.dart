@@ -1,4 +1,3 @@
-
 import 'package:comic_vine_app/data/model/issues_model.dart';
 import 'package:comic_vine_app/ui/features/comics/bloc/comics_bloc.dart';
 import 'package:comic_vine_app/ui/features/comics/view/widgets/description_text.dart';
@@ -66,8 +65,20 @@ class _CustomCardProductState extends State<CustomCardProduct> {
                         aspectRatio: 1,
                         child: Padding(
                           padding: const EdgeInsets.all(Const.padding),
-                          child: Image.network(widget.comic.image!.mediumUrl!,
-                              fit: BoxFit.contain),
+                          child: Image.network(
+                            widget.comic.image!.mediumUrl!,
+                            fit: BoxFit.contain,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              } else {
+                                return const Center(
+                                  child:
+                                      CircularProgressIndicator(), // Placeholder de carga
+                                );
+                              }
+                            },
+                          ),
                         ),
                       ),
                     ),

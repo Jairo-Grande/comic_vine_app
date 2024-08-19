@@ -3,6 +3,7 @@ import 'package:comic_vine_app/ui/features/comics/view/widgets/comics_list.dart'
 import 'package:comic_vine_app/ui/features/comics/view/widgets/search_bar.dart';
 import 'package:comic_vine_app/utils/contants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
+  TextEditingController textController = TextEditingController();
 
   int offset = 0;
 
@@ -60,9 +62,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Flexible(
                       child: CustomSearchBar(
-                    controller: TextEditingController(),
+                    controller: textController,
+                    onChanged: (p0) {
+                      context
+                          .read<IssueBloc>()
+                          .add(SearchComic(text: textController.text));
+                    },
                   )),
-                  SizedBox(width: 20)
+                  const SizedBox(width: 20)
                 ],
               ),
             ),
@@ -77,17 +84,10 @@ class _HomePageState extends State<HomePage> {
                             ? Text('Error ${state.issuesError}')
                             : (state.issues != null)
                                 ? ComicsList(
-                                    comics: state.issues!.results!,
+                                    comics: state.filteredIssues!,
                                     isLoading: false,
                                     scrollController: _scrollController)
                                 : Container();
-
-                    /*  
-                //  comics grid
-                   return  ComicsGrid(
-                        comics: state.data!.results!,
-                        isLoading: false,                    
-                      ); */
                   },
                 ),
               ),
