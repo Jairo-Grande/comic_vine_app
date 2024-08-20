@@ -42,7 +42,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
           issuesLoading: true, issuesError: '', issueDetailsError: ''));
     }
 
-//TODO fix here when load after disconect recover state.offset.
+
     final response = await getComicVineApi.getIssues(
         offset: (state.issues?.offset ?? 0) + (state.issues?.limit ?? 0));
     response.fold(

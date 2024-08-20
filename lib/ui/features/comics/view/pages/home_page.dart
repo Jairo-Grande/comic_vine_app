@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
     context
         .read<IssueBloc>()
         .add(LoadIssues(offset: offset += 11, loadingMoreData: true));
-    print('offsetttt: $offset');
   }
 
   @override
@@ -90,11 +89,8 @@ class _HomePageState extends State<HomePage> {
                                   TextButton(
                                       onPressed: () {
                                         //aumentar solo si la solicitud es positiva.....
-                                        context
-                                            .read<IssueBloc>()
-                                            .add(LoadIssues(offset: offset+11));
-
-                                        print('offsetttt: $offset');
+                                        context.read<IssueBloc>().add(
+                                            LoadIssues(offset: offset + 11));
                                       },
                                       child: const Text('Try Again'))
                                 ],
