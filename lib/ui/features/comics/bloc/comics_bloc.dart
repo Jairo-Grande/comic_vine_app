@@ -80,7 +80,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
   _loadIssueDetail(LoadIssueDetails event, Emitter emit) async {
     if (event.deleteRegister != null && event.deleteRegister == true) {
-      emit(state.copyWith(issueDetailsLoading: true));
+      emit(state.copyWith(issueDetailsLoading: true,issuesError:''));
       //delete register.
       await getComicVineLocal.deleteComic(id: state.issueDetails!.id!);
     } else {
