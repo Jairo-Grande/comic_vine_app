@@ -1,12 +1,21 @@
-import 'package:comic_vine_app/ui/features/splash/view/pages/splash_page.dart';
+import 'package:comic_vine_app/config/themes/custom_theme.dart';
+import 'package:comic_vine_app/ui/features/comics/bloc/comics_bloc.dart';
+import 'package:comic_vine_app/ui/features/comics/view/pages/home_page.dart';
 import 'package:comic_vine_app/ui/routes.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dependency_injection/injection.dart' as di;
+import 'package:flutter/material.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   return runApp(
-     MyApp(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => di.locator<IssueBloc>()),
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -19,7 +28,8 @@ class MyApp extends StatelessWidget {
       title: 'comic_vine',
       debugShowCheckedModeBanner: false,
       routes: appRoutes,
-      home: const SplashPage(),
+      home: const HomePage(),
+      theme: themeLight(context),
     );
   }
 }
