@@ -27,6 +27,7 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -41,7 +42,6 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                     child: Image.asset(width: 70, height: 50, Assets.appIcon),
                   ),
                   Expanded(child: Container()),
-              
                 ],
               ),
             ),
@@ -56,7 +56,7 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                       if (state.issueDetailsError != null) {
                         return Text('Error ${state.issuesError}');
                       } else if (state.issueDetailsLoading) {
-                     return  Container();
+                        return Container();
                       } else if (state.issueDetails != null) {
                         //function to organize list  person_credits,character_credits,team_credits,location_credits,concept_credits
                         _formatList(state.issueDetails!);
@@ -80,92 +80,106 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                                           const EdgeInsets.all(Const.padding),
                                       child: Image.network(
                                           state.issueDetails!.image!.mediumUrl!,
-                                          fit: BoxFit.contain),
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                        return Opacity(
+                                          opacity: 0.7,
+                                          child: Column(
+                                            children: [
+                                              Icon(
+                                                Icons
+                                                    .error, // Icono que se muestra si hay un error al cargar la imagen
+                                                size: 80,
+                                                color: theme.colorScheme.error,
+                                              ),
+                                              const Text('error getting image')
+                                            ],
+                                          ),
+                                        );
+                                      }, fit: BoxFit.contain),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                           Container(
-                                    color: Colors.grey[200],
-                                    width: double.infinity,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.all(Const.padding),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          DescriptionText(
-                                              principalText: 'Name',
-                                              secondaryText:
-                                                  state.issueDetails!.name),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          DescriptionText(
-                                              principalText: 'Issue Number',
-                                              secondaryText: state
-                                                  .issueDetails?.issueNumber),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          DescriptionText(
-                                              principalText: 'Volume',
-                                              secondaryText: state
-                                                  .issueDetails!.volume?.name),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          DescriptionText(
-                                            principalText: 'First Sold',
-                                            secondaryText: (state.issueDetails
-                                                        ?.storeDate !=
-                                                    null)
-                                                ? formattedDate =
-                                                    DateFormat('dd/MMM/yyyy')
-                                                        .format(state
-                                                            .issueDetails!
-                                                            .storeDate!)
-                                                : null,
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          const Divider(),
-                                          DescriptionText(
-                                            principalText: 'Person Credits',
-                                            secondaryText: personCreditNames,
-                                            titleMode: true,
-                                          ),
-                                          const Divider(),
-                                          DescriptionText(
-                                            principalText: 'Characters Credits',
-                                            titleMode: true,
-                                            secondaryText: characterNames,
-                                          ),
-                                          const Divider(),
-                                          DescriptionText(
-                                            principalText: 'Team Credits',
-                                            titleMode: true,
-                                            secondaryText: teamNames,
-                                          ),
-                                          const Divider(),
-                                          DescriptionText(
-                                            principalText: 'Location Credits',
-                                            secondaryText: locationNames,
-                                            titleMode: true,
-                                          ),
-                                          const Divider(),
-                                          DescriptionText(
-                                            principalText: 'Concept Credits',
-                                            secondaryText: conceptNames,
-                                            titleMode: true,
-                                          ),
-                                        ],
-                                      ),
+                            Container(
+                              color: Colors.grey[200],
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.all(Const.padding),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    DescriptionText(
+                                        principalText: 'Name',
+                                        secondaryText:
+                                            state.issueDetails!.name),
+                                    const SizedBox(
+                                      height: 10,
                                     ),
-                                  ),
+                                    DescriptionText(
+                                        principalText: 'Issue Number',
+                                        secondaryText:
+                                            state.issueDetails?.issueNumber),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    DescriptionText(
+                                        principalText: 'Volume',
+                                        secondaryText:
+                                            state.issueDetails!.volume?.name),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    DescriptionText(
+                                      principalText: 'First Sold',
+                                      secondaryText:
+                                          (state.issueDetails?.storeDate !=
+                                                  null)
+                                              ? formattedDate =
+                                                  DateFormat('dd/MMM/yyyy')
+                                                      .format(state
+                                                          .issueDetails!
+                                                          .storeDate!)
+                                              : null,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    const Divider(),
+                                    DescriptionText(
+                                      principalText: 'Person Credits',
+                                      secondaryText: personCreditNames,
+                                      titleMode: true,
+                                    ),
+                                    const Divider(),
+                                    DescriptionText(
+                                      principalText: 'Characters Credits',
+                                      titleMode: true,
+                                      secondaryText: characterNames,
+                                    ),
+                                    const Divider(),
+                                    DescriptionText(
+                                      principalText: 'Team Credits',
+                                      titleMode: true,
+                                      secondaryText: teamNames,
+                                    ),
+                                    const Divider(),
+                                    DescriptionText(
+                                      principalText: 'Location Credits',
+                                      secondaryText: locationNames,
+                                      titleMode: true,
+                                    ),
+                                    const Divider(),
+                                    DescriptionText(
+                                      principalText: 'Concept Credits',
+                                      secondaryText: conceptNames,
+                                      titleMode: true,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         );
                       } else {

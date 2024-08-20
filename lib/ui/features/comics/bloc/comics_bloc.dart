@@ -31,47 +31,51 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
   _loadIssues(LoadIssues event, Emitter emit) async {
     //pagination logic.
-    if (state.loadingMoreData || !state.hasMore) return;
+    try {
+      if (state.loadingMoreData || !state.hasMore) return;
 
-    if (event.loadingMoreData != null && event.loadingMoreData == true) {
-      emit(state.copyWith(loadingMoreData: true));
-    } else {
-      emit(state.copyWith(issuesLoading: true));
-    }
+      if (event.loadingMoreData != null && event.loadingMoreData == true) {
+        emit(state.copyWith(loadingMoreData: true,issuesError: ''));
+      } else {
+        emit(state.copyWith(issuesLoading: true, issuesError: ''));
+      }
 
-    final response = await getComicVineApi.getIssues(offset: event.offset);
-    response.fold(
-      (failure) {
-        emit(state.copyWith(
-            issuesError: failure.message,
-            issuesLoading: false,
-            loadingMoreData: false));
-      },
-      (issues) {
-        final hasMore = issues.results!.length == 10;
-        IssuesModel? updatedIssues = issues;
-        //Add new issues to paginate.
-        if (state.issues != null) {
-          updatedIssues = state.issues?.copyWith(
-            results: [...?state.issues?.results, ...issues.results!],
-          );
-        }
-
-        if (state.loadingMoreData) {
+      final response = await getComicVineApi.getIssues(offset: event.offset);
+      response.fold(
+        (failure) {
           emit(state.copyWith(
+              issuesError: failure.message,
+              issuesLoading: false,
+              loadingMoreData: false));
+        },
+        (issues) {
+          final hasMore = issues.results!.length == 10;
+          IssuesModel? updatedIssues = issues;
+          //Add new issues to paginate.
+          if (state.issues != null) {
+            updatedIssues = state.issues?.copyWith(
+              results: [...?state.issues?.results, ...issues.results!],
+            );
+          }
+
+          if (state.loadingMoreData) {
+            emit(state.copyWith(
+                filteredIssues: updatedIssues!.results,
+                issues: updatedIssues,
+                loadingMoreData: false,
+                hasMore: hasMore));
+          } else {
+            emit(state.copyWith(
               filteredIssues: updatedIssues!.results,
               issues: updatedIssues,
-              loadingMoreData: false,
-              hasMore: hasMore));
-        } else {
-          emit(state.copyWith(
-            filteredIssues: updatedIssues!.results,
-            issues: updatedIssues,
-            issuesLoading: false,
-          ));
-        }
-      },
-    );
+              issuesLoading: false,
+            ));
+          }
+        },
+      );
+    } catch (error) {
+      print('error $error');
+    }
   }
 
   _loadIssueDetail(LoadIssueDetails event, Emitter emit) async {
@@ -164,12 +168,12 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
     if (event.text.isNotEmpty) {
       if (state.issues != null && state.issues!.results != null) {
         dummyList = state.issues!.results!
-            .where((item) =>                
+            .where((item) =>
                 item.name != null &&
                 item.name!.toLowerCase().contains(event.text.toLowerCase()))
             .toList();
         emit(state.copyWith(filteredIssues: dummyList));
-      } else {      
+      } else {
         emit(state.copyWith(filteredIssues: []));
       }
     } else {

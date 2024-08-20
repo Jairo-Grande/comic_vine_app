@@ -67,6 +67,14 @@ class _CustomCardProductState extends State<CustomCardProduct> {
                           padding: const EdgeInsets.all(Const.padding),
                           child: Image.network(
                             widget.comic.image!.mediumUrl!,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(
+                                Icons
+                                    .error, // Icono que se muestra si hay un error al cargar la imagen
+                                size: 50,
+                                color: Colors.red,
+                              );
+                            },
                             fit: BoxFit.contain,
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) {

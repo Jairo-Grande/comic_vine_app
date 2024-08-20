@@ -1,4 +1,5 @@
 import 'package:comic_vine_app/data/exeption.dart';
+import 'package:comic_vine_app/data/failure.dart';
 import 'package:comic_vine_app/data/model/issues_model.dart';
 import 'package:dio/dio.dart';
 
@@ -17,8 +18,8 @@ class RemoteDataSource {
       responseType: ResponseType.json,
       queryParameters: {'api_key': apiKey, 'format': 'json'},
       headers: {'Content-Type': 'application/json'},
-      connectTimeout: Duration(seconds: connectTimeout),
-      receiveTimeout: Duration(seconds: receiveTimeout),
+      connectTimeout: Duration(milliseconds: connectTimeout),
+      receiveTimeout: Duration(milliseconds: receiveTimeout),
     );
 
     _client = Dio(_optionsApi);
@@ -34,6 +35,7 @@ class RemoteDataSource {
         handler.next(response);
       },
       onError: (error, handler) {
+        print('error interceptor $error');
         handler.next(error);
       },
     ));
@@ -54,7 +56,7 @@ class RemoteDataSource {
     final apiResponse = await _client
         .get('/issues', queryParameters: queryParams)
         .catchError((error) {
-      return error.response;
+      throw ServerException();
     });
 
     if (apiResponse.statusCode == 200) {
@@ -77,7 +79,7 @@ class RemoteDataSource {
     final apiResponse = await _client
         .get('/issue/4000-$id/', queryParameters: queryParams)
         .catchError((error) {
-      return error.response;
+     throw ServerException();
     });
 
     if (apiResponse.statusCode == 200) {

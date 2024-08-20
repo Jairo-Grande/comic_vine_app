@@ -80,8 +80,21 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, state) {
                     return (state.issuesLoading)
                         ? const Center(child: CircularProgressIndicator())
-                        : (state.issuesError != null)
-                            ? Text('Error ${state.issuesError}')
+                        : (state.issuesError != null && state.issuesError !='')
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Error ${state.issuesError}'),
+                                  TextButton(
+                                      onPressed: () {
+                                        context
+                                            .read<IssueBloc>()
+                                            .add(LoadIssues());
+                                      },
+                                      child: const Text('Try Again'))
+                                ],
+                              ))
                             : (state.issues != null)
                                 ? ComicsList(
                                     comics: state.filteredIssues!,
