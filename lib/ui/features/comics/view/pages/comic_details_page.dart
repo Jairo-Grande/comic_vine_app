@@ -53,8 +53,28 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                 child: SingleChildScrollView(
                   child: BlocBuilder<IssueBloc, IssueState>(
                     builder: (context, state) {
-                      if (state.issueDetailsError != null) {
-                        return Text('Error ${state.issuesError}');
+                      if (state.issueDetailsError != null &&
+                          state.issueDetailsError != '') {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: Screens.height(context) * 0.4,
+                              ),
+                              Text('Error ${state.issuesError}'),
+                              TextButton(
+                                  onPressed: () {
+                                    context
+                                        .read<IssueBloc>()
+                                        .add(LoadIssueDetails(null, true));
+                                  },
+                                  child: const Text('Try Again'))
+                            ],
+                          )),
+                        );
                       } else if (state.issueDetailsLoading) {
                         return Container();
                       } else if (state.issueDetails != null) {

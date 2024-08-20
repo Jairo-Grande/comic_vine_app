@@ -31,13 +31,13 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
   _loadIssues(LoadIssues event, Emitter emit) async {
     //pagination logic.
-    try {
+  
       if (state.loadingMoreData || !state.hasMore) return;
 
       if (event.loadingMoreData != null && event.loadingMoreData == true) {
-        emit(state.copyWith(loadingMoreData: true,issuesError: ''));
+        emit(state.copyWith(loadingMoreData: true,issuesError: '',issueDetailsError: ''));
       } else {
-        emit(state.copyWith(issuesLoading: true, issuesError: ''));
+        emit(state.copyWith(issuesLoading: true, issuesError: '',issueDetailsError: ''));
       }
 
       final response = await getComicVineApi.getIssues(offset: event.offset);
@@ -73,14 +73,12 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
           }
         },
       );
-    } catch (error) {
-      print('error $error');
-    }
+  
   }
 
   _loadIssueDetail(LoadIssueDetails event, Emitter emit) async {
     if (event.deleteRegister != null && event.deleteRegister == true) {
-      emit(state.copyWith(issueDetailsLoading: true,issuesError:''));
+      emit(state.copyWith(issueDetailsLoading: true,issueDetailsError: ''));
       //delete register.
       await getComicVineLocal.deleteComic(id: state.issueDetails!.id!);
     } else {
@@ -126,7 +124,7 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
     response.fold((failure) {
       emit(state.copyWith(
-          issuesError: failure.message, issueDetailsLoading: false));
+          issuesError: failure.message, issueDetailsLoading: false,issueDetailsError:failure.message ));
     }, (issueDetails) {
       final updatedIssueDetails = state.issueDetails!.copyWith(
         personCredits: issueDetails.personCredits,

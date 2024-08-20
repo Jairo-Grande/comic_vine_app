@@ -1,5 +1,5 @@
 import 'package:comic_vine_app/data/exeption.dart';
-import 'package:comic_vine_app/data/failure.dart';
+
 import 'package:comic_vine_app/data/model/issues_model.dart';
 import 'package:dio/dio.dart';
 
@@ -34,8 +34,7 @@ class RemoteDataSource {
       onResponse: (response, handler) {
         handler.next(response);
       },
-      onError: (error, handler) {
-        print('error interceptor $error');
+      onError: (error, handler) {        
         handler.next(error);
       },
     ));

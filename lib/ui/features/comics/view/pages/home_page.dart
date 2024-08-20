@@ -3,7 +3,7 @@ import 'package:comic_vine_app/ui/features/comics/view/widgets/comics_list.dart'
 import 'package:comic_vine_app/ui/features/comics/view/widgets/search_bar.dart';
 import 'package:comic_vine_app/utils/contants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
