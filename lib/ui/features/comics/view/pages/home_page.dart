@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
     context
         .read<IssueBloc>()
         .add(LoadIssues(offset: offset += 11, loadingMoreData: true));
+    print('offsetttt: $offset');
   }
 
   @override
@@ -80,17 +81,20 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, state) {
                     return (state.issuesLoading)
                         ? const Center(child: CircularProgressIndicator())
-                        : (state.issuesError != null && state.issuesError !='')
+                        : (state.issuesError != null && state.issuesError != '')
                             ? Center(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text('Error ${state.issuesError}'),
                                   TextButton(
                                       onPressed: () {
+                                        //aumentar solo si la solicitud es positiva.....
                                         context
                                             .read<IssueBloc>()
-                                            .add(LoadIssues());
+                                            .add(LoadIssues(offset: offset+11));
+
+                                        print('offsetttt: $offset');
                                       },
                                       child: const Text('Try Again'))
                                 ],

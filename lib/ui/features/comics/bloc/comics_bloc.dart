@@ -31,54 +31,58 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
   _loadIssues(LoadIssues event, Emitter emit) async {
     //pagination logic.
-  
-      if (state.loadingMoreData || !state.hasMore) return;
 
-      if (event.loadingMoreData != null && event.loadingMoreData == true) {
-        emit(state.copyWith(loadingMoreData: true,issuesError: '',issueDetailsError: ''));
-      } else {
-        emit(state.copyWith(issuesLoading: true, issuesError: '',issueDetailsError: ''));
-      }
+    if (state.loadingMoreData || !state.hasMore) return;
 
-      final response = await getComicVineApi.getIssues(offset: event.offset);
-      response.fold(
-        (failure) {
+    if (event.loadingMoreData != null && event.loadingMoreData == true) {
+      emit(state.copyWith(
+          loadingMoreData: true, issuesError: '', issueDetailsError: ''));
+    } else {
+      emit(state.copyWith(
+          issuesLoading: true, issuesError: '', issueDetailsError: ''));
+    }
+
+//TODO fix here when load after disconect recover state.offset.
+    final response = await getComicVineApi.getIssues(
+        offset: (state.issues?.offset ?? 0) + (state.issues?.limit ?? 0));
+    response.fold(
+      (failure) {
+        emit(state.copyWith(
+            issuesError: failure.message,
+            issuesLoading: false,
+            loadingMoreData: false));
+      },
+      (issues) {
+        final hasMore = issues.results!.length == 10;
+        IssuesModel? updatedIssues = issues;
+        //Add new issues to paginate.
+        if (state.issues != null) {
+          updatedIssues = state.issues?.copyWith(
+            offset: issues.offset,
+            results: [...?state.issues?.results, ...issues.results!],
+          );
+        }
+
+        if (state.loadingMoreData) {
           emit(state.copyWith(
-              issuesError: failure.message,
-              issuesLoading: false,
-              loadingMoreData: false));
-        },
-        (issues) {
-          final hasMore = issues.results!.length == 10;
-          IssuesModel? updatedIssues = issues;
-          //Add new issues to paginate.
-          if (state.issues != null) {
-            updatedIssues = state.issues?.copyWith(
-              results: [...?state.issues?.results, ...issues.results!],
-            );
-          }
-
-          if (state.loadingMoreData) {
-            emit(state.copyWith(
-                filteredIssues: updatedIssues!.results,
-                issues: updatedIssues,
-                loadingMoreData: false,
-                hasMore: hasMore));
-          } else {
-            emit(state.copyWith(
               filteredIssues: updatedIssues!.results,
               issues: updatedIssues,
-              issuesLoading: false,
-            ));
-          }
-        },
-      );
-  
+              loadingMoreData: false,
+              hasMore: hasMore));
+        } else {
+          emit(state.copyWith(
+            filteredIssues: updatedIssues!.results,
+            issues: updatedIssues,
+            issuesLoading: false,
+          ));
+        }
+      },
+    );
   }
 
   _loadIssueDetail(LoadIssueDetails event, Emitter emit) async {
     if (event.deleteRegister != null && event.deleteRegister == true) {
-      emit(state.copyWith(issueDetailsLoading: true,issueDetailsError: ''));
+      emit(state.copyWith(issueDetailsLoading: true, issueDetailsError: ''));
       //delete register.
       await getComicVineLocal.deleteComic(id: state.issueDetails!.id!);
     } else {
@@ -124,7 +128,9 @@ class IssueBloc extends Bloc<IssueEvent, IssueState> {
 
     response.fold((failure) {
       emit(state.copyWith(
-          issuesError: failure.message, issueDetailsLoading: false,issueDetailsError:failure.message ));
+          issuesError: failure.message,
+          issueDetailsLoading: false,
+          issueDetailsError: failure.message));
     }, (issueDetails) {
       final updatedIssueDetails = state.issueDetails!.copyWith(
         personCredits: issueDetails.personCredits,
